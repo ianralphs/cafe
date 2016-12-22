@@ -41,47 +41,38 @@ import org.scalatest._
 		// Corrected for step 2 service charge
 		"An order for Cola, Coffee and Cheese Sandwich" should "cost 3.85" in {
 			var myOrder = new Order(100)
-			myOrder.addItem("Cola")
-			myOrder.addItem("Coffee")
-			myOrder.addItem("Cheese sandwich")
+			myOrder.addItem(List("Cola"))
+			myOrder.addItem(List("Coffee"))
+			myOrder.addItem(List("Cheese sandwich"))
 			assert(myOrder.calculateBill == 3.85)
 		}
 
 		// Test addition of items to order and calculation of bill with no service charge
 		"An order for 2 x Cola and Coffee" should "cost 2.00" in {
 			var myOrder = new Order(101)
-			myOrder.addItem("Cola")
-			myOrder.addItem("Cola")
-			myOrder.addItem("Coffee")
+			myOrder.addItem(List("Cola","Cola","Coffee"))
 			assert(myOrder.calculateBill == 2.00)
 		}
 
 		// Test addition of items to order and calculation of bill with 10% service charge
 		"An order for 2 x Cola, Cheese Sandwich and Coffee" should "cost 4.40" in {
 			var myOrder = new Order(102)
-			myOrder.addItem("Cola")
-			myOrder.addItem("Cola")
-			myOrder.addItem("Cheese Sandwich")
-			myOrder.addItem("Coffee")
+			myOrder.addItem(List("Cola","Cola","Cheese Sandwich","Coffee"))
 			assert(myOrder.calculateBill == 4.40)
 		}
-
 		// Test addition of items to order and calculation of bill with 20% service charge
 		"An order for 2 x Cola, Cheese Sandwich, Steak Sandwich and Coffee" should "cost 10.20" in {
 			var myOrder = new Order(103)
-			myOrder.addItem("Cola")
-			myOrder.addItem("Cola")
-			myOrder.addItem("Cheese Sandwich")
-			myOrder.addItem("Steak Sandwich")
-			myOrder.addItem("Coffee")
+			myOrder.addItem(List("Cola","Cola","Cheese Sandwich","Steak Sandwich","Coffee"))
 			assert(myOrder.calculateBill == 10.20)
 		}
+
 
 		// Test addition of items to order and calculation of bill with 20% service charge capped at £20
 		"An order for 100 x Steak Sandwich" should "cost 470.00" in {
 			var myOrder = new Order(104)
 			for (x <- 1 to 100) {
-				myOrder.addItem("Steak Sandwich")
+				myOrder.addItem(List("Steak Sandwich"))
 			}
 			assert(myOrder.calculateBill == 470.00)
 		}
