@@ -44,10 +44,12 @@ import scala.collection.immutable._
 		val item = ListBuffer[Int]()	// List of items selected on the order
 		
 		// Method to add items to order through description
-		def addItem(newItem: String) : Unit = {
-			for (menu_item <- Menu.menu) {
-				if (newItem.equalsIgnoreCase(menu_item.desc)) {
-					item += menu_item.code
+		def addItem(newItems: List[String]) : Unit = {
+			for (newItem <- newItems) {
+				for (menu_item <- Menu.menu) {
+					if (newItem.equalsIgnoreCase(menu_item.desc)) {
+						item += menu_item.code
+					}
 				}
 			}
 		}
