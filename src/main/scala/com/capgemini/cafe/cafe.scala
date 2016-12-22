@@ -43,9 +43,6 @@ import scala.collection.immutable._
 		val orderNo: Int = ordNo		// The number for this order (later revision needs to generate this)
 		val item = ListBuffer[Int]()	// List of items selected on the order
 		
-		// Convert initial list of ordered items into the menu_code that are stored
-		
-		
 		// Method to add items to order through description
 		def addItem(newItems: List[String]) : Unit = {
 			for (newItem <- newItems) {
