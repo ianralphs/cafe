@@ -9,6 +9,8 @@
 // Date		Author		Change
 // 1.0		21/12/16	Initial version
 // 1.1		22/12/16	Step 2 - Added support for service charges
+// 1.2		29/12/16	Non functional changes to add filters to Menu and
+//						replace for loops in calculateBill with functional stmts
 //
 //////////////////////////////////////////////////////////////////////////////
 package com.capgemini.cafe {
@@ -35,6 +37,11 @@ import scala.collection.immutable._
 						MenuItem(2, "Coffee", 1.0, true, false), 
 						MenuItem(3, "Cheese Sandwich", 2.0, false, true), 
 						MenuItem(4, "Steak Sandwich", 4.5, true, true))
+						
+		def costOfItem(code: Int): Double = menu.filter(x => x.code == code).head.cost
+		def isItemFood(code: Int): Boolean = menu.filter(x => x.code == code).head.isFood
+		def isItemHot(code: Int): Boolean = menu.filter(x => x.code == code).head.isHot
+		def isItemHotFood(code: Int): Boolean = menu.filter(x => x.code == code).head.isHot && isItemFood(code)
 	}
 	
 	// Order class to capture orders
@@ -65,24 +72,15 @@ import scala.collection.immutable._
 			var total: Double = 0.0		// Local variable to hold total of order
 			var serviceCharge: Int = 0	// Local variable to hold Service Charge percentage
 			
-			// Loop through all items on this order
-			for (order_item <- item) {
-				for (menu_item <- Menu.menu) {
-				
-					// Add up the cost of the goods purchased
-					if (order_item == menu_item.code) {
-						total += menu_item.cost
-						
-						// Calculate Service Charge percentage
-						if ((menu_item.isFood==true) && (serviceCharge < 10)) {
-							serviceCharge = 10
-						}
-						else if ((menu_item.isHot==true) && (menu_item.isFood==true) && (serviceCharge < 20)) {
-							serviceCharge = 20
-						}
-					}					
-				}
-			}
+			// Calculate the cost of the items on this order
+			total = item.map(Menu.costOfItem(_)).sum
+			
+			// Calculate Service Charge
+			// If any item is food the set Service charge to 10%
+			if (item.map(Menu.isItemFood(_)).contains(true)) serviceCharge = 10
+
+			// If any item is hot food override Service charge to 20%
+			if (item.map(Menu.isItemHotFood(_)).contains(true)) serviceCharge = 20
 			
 			// Add service charge to the total for this order subject to maximum of £20
 			if (total*serviceCharge/100 > 20) {
